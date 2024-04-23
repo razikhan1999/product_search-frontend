@@ -1,0 +1,129 @@
+<mat-drawer-container class="example-container shadow-right shadow-md" autosize>
+  <mat-drawer #drawer class="example-sidenav shadow-right shadow-md" mode="side">
+    <p>FILTERS</p>
+    <form class="example-form">
+      <mat-form-field class="example-full-width">
+        <span matPrefix> </span>
+        <input type="tel" matInput [value]="search" placeholder="Search" name="search" [matAutocomplete]="auto"
+          (input)="searchProducts($event, 'key')" [(ngModel)]="search" />
+        <button matSuffix mat-button><mat-icon>search</mat-icon></button>
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let suggestion of suggestions" [value]="suggestion" (click)="searchProducts(suggestion, 'autocomplete')">
+            {{ suggestion }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <br />
+    </form>
+    <div class="py-2 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <mat-icon>filter_alt</mat-icon> <span>Filter</span>
+      </div>
+      <button class="text-blue-500 underline decoration-blue-500 !important" (click)="clearFilter()" mat-raised-button>
+        Clear
+      </button>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <mat-accordion>
+      <mat-expansion-panel class="pt-4 pb-0 !important" (opened)="panelOpenState = true"
+        (closed)="panelOpenState = false">
+        <mat-expansion-panel-header>
+          <mat-panel-title> Categories </mat-panel-title>
+        </mat-expansion-panel-header>
+        <section class="example-section">
+          <mat-checkbox (change)="searchProducts($event, 'categoryElectronics')"
+            [checked]="categoryElectronics">Electronics</mat-checkbox>
+          <mat-checkbox (change)="searchProducts($event, 'categoryHealth')" [checked]="categoryHealth">Health &
+            Fitness</mat-checkbox>
+        </section>
+      </mat-expansion-panel>
+      <mat-divider></mat-divider>
+    </mat-accordion>
+
+    <mat-accordion>
+      <mat-expansion-panel class="pt-4 pb-0 !important" (opened)="panelOpenState = true"
+        (closed)="panelOpenState = false">
+        <mat-expansion-panel-header>
+          <mat-panel-title> Price </mat-panel-title>
+        </mat-expansion-panel-header>
+        <section class="example-section">
+          <div class="flex items-center gap-2 justify-between">
+            <mat-form-field class="price-full-width">
+              <mat-label>Min</mat-label>
+              <input [value]="minPrice" matInput #message maxlength="128" type="number" min="0"
+                (input)="searchProducts($event, 'minPrice')" />
+            </mat-form-field>
+            <div>-</div>
+            <mat-form-field class="price-full-width">
+              <mat-label>Max</mat-label>
+              <input [value]="maxPrice" matInput #message maxlength="128" min="0"
+                (input)="searchProducts($event, 'maxPrice')" type="number" />
+            </mat-form-field>
+          </div>
+        </section>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <mat-divider />
+    <mat-accordion>
+      <mat-expansion-panel class="pt-4 pb-0 !important" (opened)="panelOpenState = true"
+        (closed)="panelOpenState = false">
+        <mat-expansion-panel-header>
+          <mat-panel-title> Availability </mat-panel-title>
+        </mat-expansion-panel-header>
+        <section class="example-section">
+          <div class="flex items-center gap-2 justify-between">
+            <mat-checkbox (change)="searchProducts($event, 'Availability')"
+              [checked]="available">Available</mat-checkbox>
+          </div>
+        </section>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <mat-divider />
+
+    <mat-accordion>
+      <mat-expansion-panel class="pt-4 pb-0 !important" (opened)="panelOpenState = true"
+        (closed)="panelOpenState = false">
+        <mat-expansion-panel-header>
+          <mat-panel-title> Sort </mat-panel-title>
+        </mat-expansion-panel-header>
+        <section class="example-section">
+          <div class="flex items-center gap-2 justify-between">
+            <mat-checkbox (change)="searchProducts($event, 'sortByPrice')" [checked]="sortByPrice">Price</mat-checkbox>
+            <mat-checkbox (change)="searchProducts($event, 'sortByRating')"
+              [checked]="sortByRating">Rating</mat-checkbox>
+          </div>
+        </section>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </mat-drawer>
+
+  <div class="example-sidenav-content">
+    <div class="border-b border-b-grey py-2">
+      <button type="button" mat-button (click)="drawer.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+    <div class="p-4">
+      <app-product-listing [products]="products"></app-product-listing>
+    </div>
+  </div>
+
+  <div  *ngIf="paginationArr.length > 1" class="flex justify-center mt-8 absolute bottom-2 w-full">
+    <nav class="inline-flex">
+      <button (click)="prevPage()" class="px-4 py-2 mr-2 text-gray-600 rounded hover:bg-gray-200">
+        Previous
+      </button>
+      <button href="#" *ngFor="let page of paginationArr" (click)="pagination(page)"
+        class="px-4 py-2 mr-2 bg-gray-200 rounded hover:bg-gray-300">
+        {{ page }}
+      </button>
+      <button (click)="nextPage()" href="#" class="px-4 py-2 mr-2 text-gray-600 rounded hover:bg-gray-200">
+        Next
+      </button>
+    </nav>
+  </div>
+</mat-drawer-container>
